@@ -9,7 +9,8 @@ import '../models/list_model.dart';
 
 class ListViewModel extends BaseViewModel {
   DataManager dataManager = DataManagerImpl();
-  late List<TempResponseModel> tempResponseModelList;
+  // late List<TempResponseModel> tempResponseModelList = <TempResponseModel>[];
+   List<TempResponseModel> tempResponseModelList = <TempResponseModel>[];
   bool isLoading = true;
   TextEditingController searchTf = TextEditingController();
 
@@ -20,7 +21,7 @@ class ListViewModel extends BaseViewModel {
     var _listRes = json.decode(response.body);
 
     if (response.body != null) {
-      tempResponseModelList = <TempResponseModel>[];
+      // tempResponseModelList = <TempResponseModel>[];
       _listRes.forEach((v) {
         tempResponseModelList.add(TempResponseModel.fromJson(v));
       });

@@ -39,23 +39,36 @@ class _ListScreenState extends State<ListScreen> {
         viewModelBuilder: () => ListViewModel(),
         builder: (context, model, child) {
           return model.isLoading == true
-              ? const CircularProgressIndicator()
+              ? Center(child: const CircularProgressIndicator())
               : Column(
                   children: [
                     TextField(
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           debugPrint("value - $value");
-
-
-                            model.tempResponseModelList.forEach((item) {
-                              if (item.name!.contains(value)) {
+                          model.tempResponseModelList.forEach((item) {
+                            if (item.name!.contains(value)) {
+                              if (model.tempResponseModelList.isNotEmpty) {
                                 model.tempResponseModelList.clear();
-                                model.tempResponseModelList.add(item);
-                                setState(() {});
                               }
-                            });
+                              model.tempResponseModelList.add(item);
+                              debugPrint(
+                                  " model.tempResponseModelList - ${model.tempResponseModelList.length}");
+                            }
+                          });
 
+                          if (model.searchTf.text.isEmpty) {
+                            model.isLoading = true;
+                            if (model.tempResponseModelList.isNotEmpty) {
+                              model.tempResponseModelList.clear();
+                            }
+                            await model.getList();
+                            model.isLoading = false;
+
+                            // setState(() {});
+                          }
+                          setState(() {});
                         },
+                        controller: model.searchTf,
                         decoration: const InputDecoration(
                           hintText: "Search Data",
                           prefixIcon: Icon(Icons.search),
